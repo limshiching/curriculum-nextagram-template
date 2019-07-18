@@ -18,6 +18,11 @@
     <title>{% block title %}{% endblock %}NEXTAGRAM</title>
   </head>
   <body>
+
+    {% for error in errors if errors|length > 0 %}
+      <li>{{error}}</li>
+    {% endfor %}
+    
     {% block content %}
     {% endblock %}
   </body>

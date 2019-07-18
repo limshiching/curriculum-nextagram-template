@@ -39,8 +39,11 @@ def create():
     u = user.User(
         name=username, fullname=fullname,email=email,password=password
     )
-    u.save()
-    return redirect(url_for('users.new'))
+
+    if u.save():
+        return redirect(url_for('users.new'))
+    else:
+        return render_template('users/new.html', username = request.form['username'], fullname = request.form['fullname'], email = request.form['email'], password = request.form['password'], errors=u.errors)
 
 
 @users_blueprint.route('/<username>', methods=["GET"])
@@ -50,7 +53,7 @@ def show(username):
 
 @users_blueprint.route('/', methods=["GET"])
 def index():
-    return "USERS"
+    return f"{user.User.name}"
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])

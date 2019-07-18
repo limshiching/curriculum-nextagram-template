@@ -1,0 +1,25 @@
+{% extends "_layout.html" %}
+{% block content %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">User Lists</th>
+        </tr>
+    </thead>
+
+    <body>
+        {% for username in users %}
+        <tr>
+            <td value="{{user.id}}">
+                {{ username.name }}
+            </td>
+        </tr>
+        {% endfor %}
+    </body>
+
+</table>
+
+
+
+{% endblock %}
