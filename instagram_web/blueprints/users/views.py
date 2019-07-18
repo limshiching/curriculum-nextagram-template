@@ -1,7 +1,11 @@
+from flask_wtf.csrf import CSRFProtect
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
 from models import *
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
+
+csrf = CSRFProtect(app)
 
 
 @app.before_request
@@ -36,8 +40,10 @@ def create():
     fullname = request.form['fullname']
     email = request.form['email']
     password = request.form['password']
+    hashed_password = generate_password_hash(password)
+
     u = user.User(
-        name=username, fullname=fullname,email=email,password=password
+        name=username, fullname=fullname,email=email,password=hashed_password
     )
 
     if u.save():

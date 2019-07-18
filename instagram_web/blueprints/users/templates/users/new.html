@@ -1,8 +1,9 @@
 {% extends "_layout.html" %}
 {% block content %}
 
-<h1>New User</h1>
 
+<div class="container">
+        <h1>New User</h1>
 <form action="{{ url_for('users.create')}}" method="POST">
     <div class="form-group">
         <label for="username">Username:</label>
@@ -25,7 +26,7 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
+</div>
 
 
 
