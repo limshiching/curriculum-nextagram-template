@@ -1,4 +1,23 @@
-from flask import Blueprint, render_template
+from flask import Flask, Blueprint, render_template, request, redirect, url_for
+from models import *
+
+app = Flask(__name__)
+
+
+@app.before_request
+def before_request():
+    db.connect()
+
+
+@app.after_request
+def after_request(response):
+    db.close()
+    return response
+
+
+@app.cli.command()
+def migrate():
+    db.evolve(ignore_tables={'base_model'})
 
 
 users_blueprint = Blueprint('users',
@@ -11,9 +30,17 @@ def new():
     return render_template('users/new.html')
 
 
-@users_blueprint.route('/', methods=['POST'])
+@users_blueprint.route('/user/create', methods=['POST'])
 def create():
-    pass
+    username = request.form['username']
+    fullname = request.form['fullname']
+    email = request.form['email']
+    password = request.form['password']
+    u = user.User(
+        name=username, fullname=fullname,email=email,password=password
+    )
+    u.save()
+    return redirect(url_for('users.new'))
 
 
 @users_blueprint.route('/<username>', methods=["GET"])
