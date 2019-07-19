@@ -12,10 +12,10 @@ class User(BaseModel):
         duplicate_username = User.get_or_none(User.name == self.name)
         duplicate_email = User.get_or_none(User.email == self.email)
 
-        if duplicate_username:
+        if duplicate_username and duplicate_username.id != self.id:
             self.errors.append('Username not unique.')
 
-        if duplicate_email:
+        if duplicate_email and duplicate_email.id != self.id:
             self.errors.append('Email not unique.')
 
 

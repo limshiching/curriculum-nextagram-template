@@ -1,12 +1,14 @@
 from flask_wtf.csrf import CSRFProtect
-from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash
+from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape
 from models import *
 from werkzeug.security import generate_password_hash
+import os
+
 
 app = Flask(__name__)
 
-csrf = CSRFProtect(app)
-app.secret_key = b'8\x12|\x82JB\xc9\xeaZ.\x8bp\x19\xccd\xe9'
+# app.secret_key = os.getenv('SECRET_KEY')
+# csrf = CSRFProtect(app)
 
 
 @app.before_request
@@ -28,7 +30,7 @@ def migrate():
 users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')
-
+                            
 
 @users_blueprint.route('/new', methods=['GET'])
 def new():
@@ -62,6 +64,7 @@ def show(username):
 @users_blueprint.route('/', methods=["GET"])
 def index():
     return "USERS"
+    
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
 def edit(id):
@@ -71,3 +74,4 @@ def edit(id):
 @users_blueprint.route('/<id>', methods=['POST'])
 def update(id):
     pass
+
