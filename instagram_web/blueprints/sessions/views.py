@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape, session
 from models.user import User
 from werkzeug.security import check_password_hash
-from flask_login import login_user, logout_user, login_manager
+from flask_login import login_user, logout_user, login_manager, current_user
 
 sessions_blueprint = Blueprint('sessions',
                             __name__,
@@ -35,7 +35,8 @@ def create():
 
 @sessions_blueprint.route('/logout')
 def logout():
-    logout_user()
-    flash('Logged out successfully')
+    if current_user.is_authenticated:
+        logout_user()
+        flash('Logged out successfully')
     return redirect(url_for('home'))
         
