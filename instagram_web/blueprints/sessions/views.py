@@ -30,7 +30,7 @@ def create():
     login_user(user)
     session["username"] = "username"
     flash('Welcome, successfully signed in.')
-    return redirect(url_for('home'))
+    return redirect(url_for('users.show', id=user.id))
 
 
 @sessions_blueprint.route('/logout')

@@ -1,14 +1,12 @@
 from flask_wtf.csrf import CSRFProtect
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape
+from models.user import User
 from models import *
-from werkzeug.security import generate_password_hash
+from flask_login import current_user
 import os
 
 
 app = Flask(__name__)
-
-# app.secret_key = os.getenv('SECRET_KEY')
-# csrf = CSRFProtect(app)
 
 
 @app.before_request
@@ -43,7 +41,6 @@ def create():
     fullname = request.form['fullname']
     email = request.form['email']
     password = request.form['password']
-    hashed_password = generate_password_hash(password)
 
     u = user.User(
         name=username, fullname=fullname,email=email,password=hashed_password
@@ -53,25 +50,56 @@ def create():
         flash('Successfully created')
         return redirect(url_for('users.new'))
     else:
-        return render_template('users/new.html', username = request.form['username'], fullname = request.form['fullname'], email = request.form['email'], password = request.form['password'], errors=u.errors)
-
-
-@users_blueprint.route('/<username>', methods=["GET"])
-def show(username):
-    pass
+        return render_template('new.html', username = request.form['username'], fullname = request.form['fullname'], email = request.form['email'], password = request.form['password'], errors=u.errors)
 
 
 @users_blueprint.route('/', methods=["GET"])
 def index():
-    return "USERS"
-    
+    user = User.select()
+
+    return render_template('home.html', user=user)
+
+
+@users_blueprint.route('/<id>', methods=["GET"])
+def show(id):
+    user = User.get_or_none(User.id == id)
+
+    if not user:
+        return redirect(url_for('home'))
+
+    return render_template('users/show.html', user=user)
+
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
 def edit(id):
-    pass
+    user = User.get_by_id(id) # the user we are modifying, based on id from form action
+    if current_user ==  user: 
+        return render_template('users/edit.html', id=user.id, user=user)
+    
+    return redirect(url_for('home'))
 
 
-@users_blueprint.route('/<id>', methods=['POST'])
+@users_blueprint.route('/users/<id>', methods=['POST'])
 def update(id):
-    pass
+    name_edit = request.form.get('name')
+    email_edit = request.form.get('email')
+    password_edit = request.form.get('password')
+    
+    user = User.get_by_id(id)
+    
+    user.name = name_edit
+    user.email = email_edit
+    user.password = password_edit
+
+    if user.save():
+        flash('Successfully updated')
+        return redirect(url_for('users.edit', id=user.id))
+
+    else:
+        return render_template('users/edit.html')
+
+    if not user:
+        return redirect(url_for('home'))
+
+
 

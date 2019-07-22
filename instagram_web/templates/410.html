@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}Gone{% endblock %}
+ 
+{% block content %}
+    <div class=container>
+        <div class="text-center">
+    <h4>The target resource is no longer available at the origin server and that this condition is likely to be permanent.</h4>
+    <h4><a href="{{ url_for('home') }}">Return to Home</a></h4>
+    </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,7 @@ from flask import Flask
 from models.base_model import db
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
-from flask import render_template
+
 
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'instagram_web')
@@ -42,8 +42,4 @@ def load_user(user_id):
     from models.user import User
     return User.get_by_id(user_id)
 
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('error.html')
 

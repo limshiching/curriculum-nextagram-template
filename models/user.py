@@ -1,5 +1,6 @@
 from models.base_model import BaseModel
 import peewee as pw
+from werkzeug.security import generate_password_hash
 
 
 class User(BaseModel):
@@ -23,6 +24,9 @@ class User(BaseModel):
 
         if duplicate_email and duplicate_email.id != self.id:
             self.errors.append('Email not unique.')
+
+        else:
+            self.password = generate_password_hash(self.password)
 
 
 
