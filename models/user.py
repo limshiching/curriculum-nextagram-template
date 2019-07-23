@@ -1,13 +1,15 @@
 from models.base_model import BaseModel
 import peewee as pw
 from werkzeug.security import generate_password_hash
-
+from playhouse.hybrid import hybrid_property
+import os
 
 class User(BaseModel):
     name = pw.CharField(unique=True)
     fullname = pw.TextField(null=False)
     email = pw.TextField(unique=True)
     password = pw.TextField(null=False)
+    profile_image = pw.TextField(null=True)
     
     def is_authenticated(self):
         return True
@@ -28,5 +30,12 @@ class User(BaseModel):
         else:
             self.password = generate_password_hash(self.password)
 
+
+    @hybrid_property
+    def profile_image_url(self):
+        if self.profile_image:
+            return os.environ.get('S3_LOCATION') + self.profile_image
+        else:
+            return os.environ.get('S3_LOCATION') + 'lFE32.jpg'
 
 

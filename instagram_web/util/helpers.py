@@ -28,4 +28,4 @@ def upload_file_to_s3(file, bucket_name, acl="public-read"):
     except Exception as e:
         print("Something Happened: ", e)
         return e
-    return "{}{}".format(os.environ.get("S3_LOCATION"), file.filename)
+    return file.filename
