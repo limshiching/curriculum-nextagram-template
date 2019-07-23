@@ -1,3 +1,4 @@
+from flask_wtf.csrf import CSRFProtect
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape, session
 from models.user import User
 from werkzeug.security import check_password_hash

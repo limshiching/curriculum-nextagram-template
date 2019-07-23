@@ -83,13 +83,11 @@ def edit(id):
 def update(id):
     name_edit = request.form.get('name')
     email_edit = request.form.get('email')
-    password_edit = request.form.get('password')
     
     user = User.get_by_id(id)
     
     user.name = name_edit
     user.email = email_edit
-    user.password = password_edit
 
     if user.save():
         flash('Successfully updated')
