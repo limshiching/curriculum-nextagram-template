@@ -4,9 +4,19 @@
 <div class="container">
     <h1>Upload Your Files</h1>
 
+    <form action="{{ url_for('users.upload')}}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/> 
+        <label for="user">Upload Profile Picture</label><br></br>
+        <input type="file" name="user_file">
+        <br></br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <br></br>
+
     <form action="{{ url_for('images.create')}}" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <label for="image">Upload Your File</label>
+        <label for="image">Upload Images</label>
         <br></br>
         <input type="file" name="user_file">
         <br></br>

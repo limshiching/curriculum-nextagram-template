@@ -21,14 +21,16 @@ class User(BaseModel):
         duplicate_username = User.get_or_none(User.name == self.name)
         duplicate_email = User.get_or_none(User.email == self.email)
 
-        if duplicate_username and duplicate_username.id != self.id:
-            self.errors.append('Username not unique.')
+        if not User.get_or_none(User.id == self.id):
 
-        if duplicate_email and duplicate_email.id != self.id:
-            self.errors.append('Email not unique.')
+            if duplicate_username and duplicate_username.id != self.id:
+                self.errors.append('Username not unique.')
 
-        else:
-            self.password = generate_password_hash(self.password)
+            if duplicate_email and duplicate_email.id != self.id:
+                self.errors.append('Email not unique.')
+
+            else:
+                self.password = generate_password_hash(self.password)
 
 
     @hybrid_property

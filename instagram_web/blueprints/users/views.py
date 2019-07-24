@@ -1,8 +1,10 @@
 from flask_wtf.csrf import CSRFProtect
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape
 from models.user import User
+from models.image import Image
 from models import *
 from flask_login import current_user
+from instagram_web.util.helpers import upload_file_to_s3
 import os
 
 
@@ -43,7 +45,7 @@ def create():
     password = request.form['password']
 
     u = user.User(
-        name=username, fullname=fullname,email=email,password=hashed_password
+        name=username, fullname=fullname,email=email,password=password
     )
 
     if u.save():
@@ -99,6 +101,30 @@ def update(id):
     if not user:
         return redirect(url_for('home'))
 
+
+@users_blueprint.route('/user/upload', methods=['POST'])
+def upload():
+
+    if "user_file" not in request.files:
+        return "No user_file key in request.files"
+
+    file = request.files["user_file"]
+
+    user = User.get_or_none(User.id == current_user.id)
+
+    if file.filename == "":
+        return "Please select a file"
+
+    if user:
+        output = upload_file_to_s3(file, os.environ.get("S3_BUCKET"))
+        user.profile_image = file.filename
+
+    if user.save():
+        flash('Successfully uploaded profile picture!')
+        return redirect(url_for('images.new'))
+        
+    else:
+        return render_template('images/new.html')
 
 
 
