@@ -3,6 +3,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape
 from models.user import User
 from models.image import Image
+from models.donation import Donation
 from instagram_web.util.braintree_helpers import gateway
 from werkzeug.utils import secure_filename
 from flask_login import current_user
@@ -20,7 +21,7 @@ def new():
 
 @donations_blueprint.route('/payment', methods=['POST'])
 def payment():
-    donation_amount = request.form.get('donation_amount')
+    donation_amount = (request.form.get('donation_amount'))
     payment_nonce = request.form.get('payment_method_nonce')
 
     result = gateway.transaction.sale({
@@ -31,9 +32,15 @@ def payment():
         }
     })
 
-    if result.is_success:
+
+    if result.is_success or result.transaction:
+        donation = Donation(user = current_user.id, amount=result.transaction.amount)
+        donation.save()
         flash('Success')
         return redirect(url_for('donations.new'))
     else:
-        flash('Error')
+        for x in result.errors.deep_errors:
+            flash('Error: %s: %s' % (x.code,x.message))
         return render_template('donations/new.html')
+
+    

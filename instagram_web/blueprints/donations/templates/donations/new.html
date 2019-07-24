@@ -10,13 +10,13 @@
   <div class="container">
       <form id="pmn_form" action="{{ url_for('donations.payment')}}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="text" name="donation_amount"/>
+        <input type="number" name="donation_amount"/>
         <input id="pmn-input" type="hidden" name="payment_method_nonce"/>
         <br></br>
   
-      <div id="dropin-container"></div>
-      <button id="submit-button">Request payment method</button>
       </form>
+      <div id="dropin-container"></div>
+    <button id="submit-button">Request payment method</button>
       <script>
         const button = document.querySelector('#submit-button');
         const form = document.getElementById('pmn_form');
@@ -29,7 +29,7 @@
           button.addEventListener('click', function () {
             instance.requestPaymentMethod(function (err, payload) {
               paymentNonceContainer.value = payload.nonce;
-              form.submit()
+              form.submit();
             });
           });
         });
