@@ -16,11 +16,15 @@
     <div class="row">
 
     {% for image in user.images %}
-            <img class="card d-flex" style="margin: 10px; padding: 1px; max-width: 20rem" src="{{image.image_path_url}}" /> 
-    {% endfor %}
-
+    <div class="card w-25 mx-auto d-block">
+        <img class="card-img-top" src="{{image.image_path_url}}" />
+        <div class="card-body">
+            <a href="{{ url_for('donations.new', image_id=image.id)}}" class="btn btn-primary mx-auto d-block">Donate Now</a>
         </div>
     </div>
-</div>
+    
+    {% endfor %}
+
+</div>    
 
 {% endblock %}

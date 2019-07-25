@@ -8,15 +8,19 @@
 
 <body>
   <div class="container">
-      <form id="pmn_form" action="{{ url_for('donations.payment')}}" method="POST">
+    <div class="card w-50 mx-auto d-block">
+      <img src="{{image.image_path_url}}" alt="picture" class="card-img-top"/>
+    </div>
+    <div id="dropin-container"></div>
+      <form id="pmn_form" action="{{ url_for('donations.payment', image_id=image.id)}}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="number" name="donation_amount"/>
-        <input id="pmn-input" type="hidden" name="payment_method_nonce"/>
-        <br></br>
-  
+        <div class="form-group">
+          <input type="number" name="donation_amount" placeholder="Please insert amount" class="form-control d-block mx-auto w-50" />
+          </div>
+          <input id="pmn-input" type="hidden" name="payment_method_nonce"/>
+        <div id="dropin-container"></div>
       </form>
-      <div id="dropin-container"></div>
-    <button id="submit-button">Request payment method</button>
+    <button class="btn btn-outline-primary mx-auto d-block" id="submit-button">Donate</button>
       <script>
         const button = document.querySelector('#submit-button');
         const form = document.getElementById('pmn_form');
