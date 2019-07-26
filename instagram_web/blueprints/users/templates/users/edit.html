@@ -16,7 +16,6 @@
         </div>
 
         <h1>Edit Email: {{ current_user.email }} </h1>
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="form-group">
             <input 
             class="form-control"
@@ -24,6 +23,15 @@
             name="email"
             value="{{ user.email }}" 
             />
+        </div>
+
+        <div class="form-check">
+            {% if user.private == True %}
+           <input type="checkbox" class="form-check-input" name="private" checked> 
+            {% else %}
+            <input type="checkbox" class="form-check-input" name="private">
+            {% endif %}
+        <label class="form-check-label" for="exampleCheck1">Set Profile To Private</label>
         </div>
 
     <button class="btn btn-outline-success d-block mx-auto">Update</button>

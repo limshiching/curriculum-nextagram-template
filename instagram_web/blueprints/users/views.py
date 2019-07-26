@@ -85,21 +85,33 @@ def edit(id):
 def update(id):
     name_edit = request.form.get('name')
     email_edit = request.form.get('email')
-    
+    private_edit = request.form.get('private')
+    print(f"private:{private_edit}")
     user = User.get_by_id(id)
     
     user.name = name_edit
     user.email = email_edit
 
-    if user.save():
-        flash('Successfully updated')
-        return redirect(url_for('users.edit', id=user.id))
-
-    else:
-        return render_template('users/edit.html')
-
     if not user:
         return redirect(url_for('home'))
+    else:
+        if request.form.get('private'):
+            user.private = True
+            if user.save():
+                flash('Successfully updated')
+                return redirect(url_for('users.edit', id=user.id))
+            else:
+                return render_template('users/edit.html')
+        else:
+            user.private = False
+            if user.save():
+                flash('Successfully updated')
+                return redirect(url_for('users.edit', id=user.id))
+
+            else:
+                return render_template('users/edit.html')
+
+
 
 
 @users_blueprint.route('/user/upload', methods=['POST'])

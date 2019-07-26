@@ -3,27 +3,38 @@
 
 
 <div class="text-center">
-    <h1>Welcome, {{user.name}}</h1>
+    <p class="col-12 font-italic text-md-right font-weight-light">Currently signed in as: {{current_user.name}} </p>
 </div>
 
 <div class="container">
     <h2>{{user.name}}'s Profile Page</h2>
     <img class ="w-10 d-flex rounded-circle p-1 border border-dark" style="max-width: 20rem" src="{{user.profile_image_url}}" />
+    
     <br>
+
+    <a href="{{ url_for('home') }}" class="btn btn-success">Follow {{user.name}}</a>
+
 
     <h2>{{user.name}}'s Images:</h2>
     
     <div class="row">
 
+    {% if user.private == True and current_user != user %}
+
+    <p class="text-center">Sorry! This user's account is set to private.</p>
+
+    {% else %}
+
     {% for image in user.images %}
     <div class="card w-25 mx-auto d-block">
-        <img class="card-img-top" src="{{image.image_path_url}}" />
+        <img class="card-img-top" style="height: 200px" src="{{image.image_path_url}}" />
         <div class="card-body">
-            <a href="{{ url_for('donations.new', image_id=image.id)}}" class="btn btn-primary mx-auto d-block">Donate Now</a>
+            <a href="{{ url_for('donations.new', image_id=image.id)}}" class="btn btn-success mx-auto d-block">Donate Now</a>
         </div>
     </div>
-    
     {% endfor %}
+    {% endif %}
+
 
 </div>    
 
