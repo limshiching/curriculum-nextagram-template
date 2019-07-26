@@ -110,8 +110,7 @@ def update(id):
 
             else:
                 return render_template('users/edit.html')
-
-
+                
 
 
 @users_blueprint.route('/user/upload', methods=['POST'])

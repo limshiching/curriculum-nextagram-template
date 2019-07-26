@@ -12,8 +12,17 @@
     
     <br>
 
-    <a href="{{ url_for('home') }}" class="btn btn-success">Follow {{user.name}}</a>
+    <form action="{{ url_for('fans_idols.create', idol_id=user.id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input class="btn btn-success" type="submit" value="Follow {{ user.name }}"/>
+    </form>
 
+    <br></br>
+
+    <form action="{{ url_for('fans_idols.unfollow', idol_id=user.id) }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input class="btn btn-success" type="submit" value="Unfollow {{ user.name }}"/>
+        </form>
 
     <h2>{{user.name}}'s Images:</h2>
     
