@@ -35,6 +35,14 @@ def unfollow(idol_id):
     flash(f"Unfollowed {idol.name}")
     return redirect(url_for('users.show', id=idol.id))
 
+# @fans_idols_blueprint.route('/<idol_id>/approve', methods=['POST'])
+
+
+# current_user.id == idol_id
+# retrieve names of fan === request - list of fans
+
+
+
     # follow_fans_idols = request.form.get('follow')
 
     # user = User.get_by_id(id)
@@ -43,6 +51,7 @@ def unfollow(idol_id):
     #     fans_idols.approved = False
     
 
+    # fan = User.get_by_id(id)
 
     
 

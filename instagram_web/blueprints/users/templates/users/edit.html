@@ -25,6 +25,17 @@
             />
         </div>
 
+        <h1>Edit Profile Bio</h1>
+        <div class="form-group">
+            <input
+            class="form-control"
+            type="text"
+            name="bio"
+            value="{{ user.bio }}"
+            />
+            
+        </div>
+
         <div class="form-check">
             {% if user.private == True %}
            <input type="checkbox" class="form-check-input" name="private" checked> 

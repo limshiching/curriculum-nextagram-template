@@ -6,9 +6,16 @@
 {% endblock %}
 {% block content %}
 <div class="text-center">
-  <h1>Homepage</h1>
+  <h3>Newsfeed</h3>
   {% if current_user.is_authenticated %}
-  <h2>welcome back {{current_user.name}}</h2>
+  {% for image in current_user.images %}
+  <ul>
+  <div class="card w-25 mx-auto d-block">
+      <img class="card-img-top" style="height: 200px" src="{{image.image_path_url}}" h6 class="card-subtitle mb-2 text-muted"> {{ image.user_id }} </h6>
+    </div>
+  </ul>
+  {% endfor %}
   {% endif %}
 </div>
 {% endblock %}
+

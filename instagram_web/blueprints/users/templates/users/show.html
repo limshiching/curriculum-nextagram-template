@@ -7,44 +7,64 @@
 </div>
 
 <div class="container">
+
     <h2>{{user.name}}'s Profile Page</h2>
-    <img class ="w-10 d-flex rounded-circle p-1 border border-dark" style="max-width: 20rem" src="{{user.profile_image_url}}" />
-    
-    <br>
+    <img class ="w-10 d-flex rounded-circle p-1 border border-dark" style="max-width: 20rem" src="{{user.profile_image_url}}" /> 
+
+    {% if user.id == current_user.id %}
+    <div class="text-center m-2 p-2">
+    <a href=" {{ url_for('images.new', id=current_user.id) }}" class="btn btn-outline-dark"> Change Profile Picture</a>
+    </div>
+    {% endif %}
+
+    {% if current_user != user %}
+
+    <div class="d-flex">
 
     <form action="{{ url_for('fans_idols.create', idol_id=user.id) }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input class="btn btn-success" type="submit" value="Follow {{ user.name }}"/>
+        <input class="btn btn-success" type="submit" style="margin: 1em" value="Follow {{ user.name }}"/>
     </form>
 
-    <br></br>
 
     <form action="{{ url_for('fans_idols.unfollow', idol_id=user.id) }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input class="btn btn-success" type="submit" value="Unfollow {{ user.name }}"/>
-        </form>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input class="btn btn-success" type="submit" style="margin: 1em" value="Unfollow {{ user.name }}"/>
+    </form>
+    </div>
 
-    <h2>{{user.name}}'s Images:</h2>
+    {% endif %}
+
+
+    <h2 class="text-center">{{user.name}}'s Images:</h2>
+
+    {% if user.id == current_user.id %}
+    <div class="text-center m-2 p-2">
+    <a href=" {{ url_for('images.new', id=current_user.id) }}" class="btn btn-outline-dark"> Create a New Post</a>
+    </div>
+    {% endif %}
+
     
-    <div class="row">
-
+    <div class="d-flex flex-row flex-wrap">
+            
     {% if user.private == True and current_user != user %}
-
+    
     <p class="text-center">Sorry! This user's account is set to private.</p>
-
+    
     {% else %}
-
+    
     {% for image in user.images %}
-    <div class="card w-25 mx-auto d-block">
-        <img class="card-img-top" style="height: 200px" src="{{image.image_path_url}}" />
+    <div class="card w-50 mx-auto d-block d-flex border-spacing:1em col-md-4 margin-top:1em">
+        <img class="card-img-top" style="height: 300px; width: 300px; margin: auto; padding-top: 1em" src="{{image.image_path_url}}" />
         <div class="card-body">
             <a href="{{ url_for('donations.new', image_id=image.id)}}" class="btn btn-success mx-auto d-block">Donate Now</a>
         </div>
     </div>
+    
     {% endfor %}
     {% endif %}
 
-
 </div>    
+</div>
 
 {% endblock %}

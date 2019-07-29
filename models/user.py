@@ -10,6 +10,7 @@ class User(BaseModel):
     email = pw.TextField(unique=True)
     password = pw.TextField(null=False)
     profile_image = pw.TextField(null=True)
+    bio = pw.TextField(null=True)
     private = pw.BooleanField(default=False)
     
     def is_authenticated(self):

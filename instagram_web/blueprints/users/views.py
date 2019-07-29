@@ -2,6 +2,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask import Flask, Blueprint, render_template, request, redirect, url_for, flash, escape
 from models.user import User
 from models.image import Image
+from models.fan_idol import FanIdol
 from models import *
 from flask_login import current_user
 from instagram_web.util.helpers import upload_file_to_s3
@@ -65,7 +66,7 @@ def index():
 @users_blueprint.route('/<id>', methods=["GET"])
 def show(id):
     user = User.get_or_none(User.id == id)
-
+    
     if not user:
         return redirect(url_for('home'))
 
@@ -86,11 +87,13 @@ def update(id):
     name_edit = request.form.get('name')
     email_edit = request.form.get('email')
     private_edit = request.form.get('private')
+    bio_edit = request.form.get('bio')
     print(f"private:{private_edit}")
     user = User.get_by_id(id)
     
     user.name = name_edit
     user.email = email_edit
+    user.bio = bio_edit
 
     if not user:
         return redirect(url_for('home'))
@@ -110,7 +113,7 @@ def update(id):
 
             else:
                 return render_template('users/edit.html')
-                
+
 
 
 @users_blueprint.route('/user/upload', methods=['POST'])
